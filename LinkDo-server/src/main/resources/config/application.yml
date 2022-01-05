@@ -1,0 +1,114 @@
+server:
+  # 端口
+  port: 8080
+
+spring:
+  # 数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yeb?nullCatalogMeansCurrent=true&useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true
+#    jdbc:mysql://localhost:3306/yeb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 12345678
+    hikari:
+      # 连接池名
+      #springboot自带的连接池
+      pool-name: DateHikariCP
+      # 最小空闲连接数
+      minimum-idle: 5
+      # 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      # 最大连接数，默认10
+      maximum-pool-size: 10
+      # 从连接池返回的连接的自动提交
+      auto-commit: true
+      # 连接最大存活时间，0表示永久存活，默认1800000（30分钟）
+      max-lifetime: 1800000
+      # 连接超时时间，默认30000（30秒）
+      connection-timeout: 30000
+      # 测试连接是否可用的查询语句
+      connection-test-query: SELECT 1
+
+  redis:
+    #超时时间
+    timeout: 10000ms
+    #服务器地址
+    host: 120.25.245.28
+    #服务器端口
+    port: 6379
+    #数据库
+    database: 0
+    #密码
+    password: root
+    lettuce:
+      pool:
+        #最大连接数，默认8
+        max-active: 1024
+        #最大连接阻塞等待时间，默认-1
+        max-wait: 10000ms
+        #最大空闲连接
+        max-idle: 2000
+        #最小空闲连接
+        min-idle: 5
+
+  # rabbitmq配置
+  rabbitmq:
+    # 用户名
+    username: guest
+    # 密码
+    password: guest
+    # 服务器地址
+    host: 120.25.245.28
+    # 端口
+    port: 5672
+    #消息确认回调
+    publisher-confirm-type: correlated
+    #消息失败回调
+    publisher-returns: true
+
+  #activiti配置
+  activiti:
+    #自动更新数据库结构
+    # true：适用开发环境，默认值。activiti会对数据库中所有表进行更新操作。如果表不存在，则自动创建
+    # false：适用生产环境。activiti在启动时，对比数据库表中保存的版本，如果没有表或者版本不匹配，将抛出异常
+    # create_drop： 在activiti启动时创建表，在关闭时删除表（必须手动关闭引擎，才能删除表）
+    # drop-create： 在activiti启动时删除原来的旧表，然后在创建新表（不需要手动关闭引擎）
+    database-schema-update: true
+    # activiti7与springboot整合后默认不创建历史表，需要手动开启
+    db-history-used: true
+    # 记录历史等级 可配置的历史级别有none, activity, audit, full
+    # none：不保存任何的历史数据，因此，在流程执行过程中，这是最高效的。
+    # activity：级别高于none，保存流程实例与流程行为，其他数据不保存。
+    # audit：除activity级别会保存的数据外，还会保存全部的流程任务及其属性。
+    # full：保存历史数据的最高级别，除了会保存audit级别的数据外，还会保存其他全部流程相关的细节数据，包括一些流程参数等。
+    history-level: full
+
+
+
+# Mybatis-plus配置
+mybatis-plus:
+  #配置Mapper映射文件
+  mapper-locations: classpath*:/mapper/*Mapper.xml
+  # 配置MyBatis数据返回类型别名（默认别名是类名）
+  type-aliases-package: com.cjx.server.pojo
+  configuration:
+    # 自动驼峰命名
+    map-underscore-to-camel-case: false
+
+## Mybatis SQL 打印(方法接口所在的包，不是Mapper.xml所在的包)
+logging:
+  level:
+    com.cjx.server.mapper: debug
+
+jwt:
+  # JWT存储的请求头
+  tokenHeader: Authorization
+  # JWT 加解密使用的密钥
+  secret: yeb-secret
+  # JWT的超期限时间（60*60*24）
+  expiration: 604800
+  # JWT 负载中拿到开头
+  tokenHead: Bearer
+
+
+
